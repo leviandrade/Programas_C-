@@ -1,0 +1,136 @@
+//Projeto de autenticação de senha muito completo
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace WfaSenha_Levi
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+        string senha;
+        int cont=3;
+        private void txtSenha_KeyPress(object sender, KeyPressEventArgs e)
+        {
+
+            
+
+                if (e.KeyChar != (char)13 && e.KeyChar != (char)8)
+                {
+                    senha = senha + e.KeyChar;
+                    e.KeyChar = '*';
+                }
+                if (e.KeyChar == (char)13)
+                {
+
+                    if (senha == "1234")
+                    {
+                        MessageBox.Show("bem vindo " + txtNome.Text);
+                        btnTesouro.Visible = true;
+                        btnEditor.Visible = true;
+                        txtNome.Enabled = false;
+                        txtSenha.Enabled = false;
+                    }
+                    while (senha != "1234" && cont>=1)
+                    {
+                        cont--;
+                        MessageBox.Show("SENHA INCORRETA VOCE TEM MAIS "+cont+" CHANCES");
+                        e.KeyChar = (char)0;
+                        senha = null;
+                        txtSenha.Text = "";
+                        break;
+                        
+                    }
+                    if (cont == 0)
+                        Close();   
+                }
+               
+            
+        }
+        
+        private void txtNome_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            char c;
+            int i;
+            i = (int)e.KeyChar;
+            if (i>=97 && i<=122)
+            {
+                c = e.KeyChar;
+                c = (char)((int)c - 32);
+                e.KeyChar = c;
+            }
+            if (e.KeyChar==(char)13)
+            {
+                txtNome.Text = txtNome.Text.Trim();
+                if(txtNome.Text.Trim().Length==0)
+                {
+                    MessageBox.Show("preenchimento obrigatorio");
+                    txtNome.Focus();
+                    return;
+                }
+                txtSenha.Focus();
+            }
+            
+            
+        }
+
+        private void btnTesouro_Click(object sender, EventArgs e)
+        {
+            if (senha == "1234")
+            {
+                Form tstTesouro = new frmTesouro();
+                tstTesouro.Show();
+                btnTesouro.Visible = false;
+                txtNome.Enabled = false;
+                txtSenha.Enabled = false;
+            }
+           
+            
+}
+        private void btnSair_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (cont != 0)
+            {
+                if (MessageBox.Show("deseja mesmo sair?", "P e r g u n t a ", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                {
+                    e.Cancel = true;
+                }
+            }
+        }
+
+        private void btnEditor_Click(object sender, EventArgs e)
+        {
+            if (senha == "1234")
+            {
+                btnEditor.Visible = false;
+                txtNome.Enabled = false;
+                txtSenha.Enabled = false;
+                Form tstEditor = new frmEditor();
+                tstEditor.Show();
+                
+            }
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            btnTesouro.Visible = false;
+            btnEditor.Visible = false;
+            txtNome.Focus();
+                
+        }       
+    }
+}
